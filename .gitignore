@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Project specific
+/www/gif.js
+/www/gif.worker.js
+/www/.idea
