@@ -1,3 +1,14 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+"""
+This Python and JavaScript software simulates a LED strip compatible with pyledstrip.
+"""
+
+__author__ = 'Michael Cipold'
+__email__ = 'github@cipold.de'
+__license__ = 'MPL-2.0'
+
 import argparse
 import json
 import math
