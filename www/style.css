@@ -1,0 +1,71 @@
+html, body {
+	margin: 0;
+}
+
+body {
+	background-color: #111;
+	color: #666;
+	font-family: "Lucida Console", Monaco, monospace;
+	font-size: small;
+}
+
+#content {
+	width: 800px;
+	margin: 30px auto;
+	background-color: black;
+	text-align: center;
+	border: 1px dotted #222;
+	padding-bottom: 20px;
+}
+
+#status {
+	text-align: left;
+	border-width: 0 0 1px 0;
+	border-style: dotted;
+	border-color: #222;
+}
+
+#live {
+	height: 30px;
+	line-height: 30px;
+	margin-left: 10px;
+}
+
+#progress {
+	float: right;
+	height: 30px;
+	line-height: 30px;
+	margin-right: 10px;
+}
+
+#animation {
+	margin-top: 20px;
+}
+
+.gif {
+	margin: 0 auto;
+	display: block;
+}
+
+button {
+	background-color: #333;
+	color: #999;
+	border: none;
+	width: 100px;
+	height: 30px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	float: right;
+}
+
+button:hover {
+	background-color: #444;
+}
+
+button:disabled {
+	background-color: #111;
+	color: #444;
+	cursor: not-allowed;
+}
