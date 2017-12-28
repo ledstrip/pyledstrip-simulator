@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
+# vim:set noet ts=4 sw=4:
 
 """
 This Python and JavaScript software simulates a LED strip compatible with pyledstrip.
@@ -69,6 +70,9 @@ class HttpHandler(BaseHTTPRequestHandler):
 		else:
 			return 'application/octet-stream'
 
+	def log_message(self, format, *args):
+		return
+
 
 class WebServer(HTTPServer):
 	thread = None
@@ -104,10 +108,12 @@ class LedServer:
 	last_client = ''
 	data_updates = 0
 	pixels = []
+	debug = False
 
-	def __init__(self, ip, port):
+	def __init__(self, ip, port, debug=False):
 		self.ip = ip
 		self.port = port
+		self.debug = debug
 
 		signal.signal(signal.SIGINT, self._signal_handler)
 
@@ -122,7 +128,8 @@ class LedServer:
 				continue
 
 			self.last_client = client_address
-			print('%d bytes received from %s' % (len(data), client_address))
+			if self.debug:
+		                print('%d bytes received from %s' % (len(data), client_address))
 
 			if len(data) < 4 or len(data) % 3 != 0:
 				print('Invalid data packet size received')
@@ -158,7 +165,10 @@ def get_demo_map(led_count):
 
 def main(args):
 	# Initialize servers
-	led_server = LedServer('0.0.0.0' if args.led_public else '127.0.0.1', args.led_port)
+	led_server = LedServer(
+		'0.0.0.0' if args.led_public else '127.0.0.1',
+		args.led_port,
+		args.debug)
 	web_server = WebServer('0.0.0.0' if args.http_public else '127.0.0.1', args.http_port)
 
 	web_server.register_key('data', lambda: {
@@ -197,5 +207,7 @@ if __name__ == '__main__':
 						help='Accept HTTP from all IP addresses, not only localhost')
 	parser.add_argument('--no_browser', type=bool, default=False,
 						help='Do not open browser on start')
+	parser.add_argument('--debug', type=bool, default=False,
+						help='Enable debug output')
 
 	main(parser.parse_args())
