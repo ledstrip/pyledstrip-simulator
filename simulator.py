@@ -129,7 +129,7 @@ class LedServer:
 
 			self.last_client = client_address
 			if self.debug:
-		                print('%d bytes received from %s' % (len(data), client_address))
+				print('%d bytes received from %s' % (len(data), client_address))
 
 			if len(data) < 4 or len(data) % 3 != 0:
 				print('Invalid data packet size received')
