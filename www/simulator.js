@@ -1,5 +1,5 @@
 const maxSize = 600;
-const offPixelBrightness = 30;
+const offPixelBrightness = 80;
 const gifWorkers = 4;
 const gifQuality = 0; // Lower is better
 

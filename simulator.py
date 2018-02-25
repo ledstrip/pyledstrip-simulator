@@ -12,7 +12,6 @@ __license__ = 'MPL-2.0'
 
 import argparse
 import json
-import math
 import signal
 import socket
 import webbrowser
@@ -154,12 +153,50 @@ class LedServer:
             raise InterruptedError
 
 
-def get_demo_map(led_count):
+def string_from_file(filename):
+    with open(filename, "r") as text_file:
+        return text_file.read()
+
+
+def map_from_file(filename):
+    """
+    read map from file created by pyledstrip-detector.
+
+    sample data can be created as follows:
+
+    result = []
+    for i in range(300):
+        entry = {
+            "id": i,
+            "x": (i + 150) - 16 * math.sin(1.99 * (i + 150) / 10),
+            "y": 40 * math.sin((i + 150) / 10) + 5 * math.sin((i + 150) / 22)
+        }
+        result.append(entry)
+
+    return json.dumps(result, indent=2)
+
+
+    :param filename: path to file
+    :return: internal data structure
+    """
+    leds = json.loads(string_from_file(filename))
+    hashed_leds = {}
+    for led in leds:
+        hashed_leds[led["id"]] = led
+
+    max_id = max(hashed_leds.keys())
+
+    # fill missing leds
+    for i in range(0, max_id):
+        if i not in hashed_leds:
+            if i - 1 in hashed_leds:
+                hashed_leds[i] = hashed_leds[i - 1]
+            else:
+                hashed_leds[i] = hashed_leds[max_id]
+
+    # convert to this tool's format
     return [
-        [
-            (key + 150) - 16 * math.sin(1.99 * (key + 150) / 10),
-            40 * math.sin((key + 150) / 10) + 5 * math.sin((key + 150) / 22)
-        ] for key in range(0, led_count)
+        [led["x"], led["y"]] for sort_the_id, led in sorted(hashed_leds.items())
     ]
 
 
@@ -177,8 +214,7 @@ def main(args):
         'data_updates': led_server.data_updates
     })
     web_server.register_key('map', lambda: {
-        # TODO replace with real map
-        'map': get_demo_map(300)
+        'map': map_from_file(args.heightmapfile)
     })
 
     # Run web server in background thread
@@ -205,6 +241,8 @@ if __name__ == '__main__':
                         help='Port for web interface')
     parser.add_argument('--http_public', type=bool, default=False,
                         help='Accept HTTP from all IP addresses, not only localhost')
+    parser.add_argument('--heightmapfile', type=str, default="data/heightmap.default.json",
+                        help='File with heightmap data')
     parser.add_argument('--no_browser', type=bool, default=False,
                         help='Do not open browser on start')
     parser.add_argument('--debug', type=bool, default=False,
