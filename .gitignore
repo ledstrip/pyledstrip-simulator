@@ -104,3 +104,5 @@ ENV/
 /www/gif.js
 /www/gif.worker.js
 /www/.idea
+
+.idea
