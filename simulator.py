@@ -154,7 +154,7 @@ class LedServer:
 
 
 def string_from_file(filename):
-    with open(filename, "r") as text_file:
+    with open(filename, 'r') as text_file:
         return text_file.read()
 
 
@@ -167,9 +167,9 @@ def map_from_file(filename):
     result = []
     for i in range(300):
         entry = {
-            "id": i,
-            "x": (i + 150) - 16 * math.sin(1.99 * (i + 150) / 10),
-            "y": 40 * math.sin((i + 150) / 10) + 5 * math.sin((i + 150) / 22)
+            'id': i,
+            'x': (i + 150) - 16 * math.sin(1.99 * (i + 150) / 10),
+            'y': 40 * math.sin((i + 150) / 10) + 5 * math.sin((i + 150) / 22)
         }
         result.append(entry)
 
@@ -182,7 +182,7 @@ def map_from_file(filename):
     leds = json.loads(string_from_file(filename))
     hashed_leds = {}
     for led in leds:
-        hashed_leds[led["id"]] = led
+        hashed_leds[led['id']] = led
 
     max_id = max(hashed_leds.keys())
 
@@ -196,7 +196,7 @@ def map_from_file(filename):
 
     # convert to this tool's format
     return [
-        [led["x"], led["y"]] for sort_the_id, led in sorted(hashed_leds.items())
+        [led['x'], led['y']] for sort_the_id, led in sorted(hashed_leds.items())
     ]
 
 
@@ -241,7 +241,7 @@ if __name__ == '__main__':
                         help='Port for web interface')
     parser.add_argument('--http_public', type=bool, default=False,
                         help='Accept HTTP from all IP addresses, not only localhost')
-    parser.add_argument('--heightmapfile', type=str, default="data/heightmap.default.json",
+    parser.add_argument('--heightmapfile', type=str, default='data/heightmap.default.json',
                         help='File with heightmap data')
     parser.add_argument('--no_browser', type=bool, default=False,
                         help='Do not open browser on start')
