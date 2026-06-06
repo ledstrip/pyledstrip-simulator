@@ -12,6 +12,7 @@ __license__ = 'MPL-2.0'
 
 import argparse
 import json
+import os
 import signal
 import socket
 import webbrowser
@@ -42,12 +43,13 @@ class HttpHandler(BaseHTTPRequestHandler):
         # Try serving from files
         if self.path == '/':
             print('Main page opened')
-            file_path = 'www/index.html'
+            file_path = os.path.join('www', 'index.html')
         else:
-            file_path = 'www/' + self.path[1:]
+            file_path = os.path.join('www', self.path[1:])
 
         # Check if file exists
         if not isfile(file_path):
+            print(f'File not found: {file_path}')
             self.send_response(404)
             self.end_headers()
             return
@@ -187,7 +189,7 @@ def map_from_file(filename):
     max_id = max(hashed_leds.keys())
 
     # fill missing leds
-    for i in range(0, max_id):
+    for i in range(max_id):
         if i not in hashed_leds:
             if i - 1 in hashed_leds:
                 hashed_leds[i] = hashed_leds[i - 1]
