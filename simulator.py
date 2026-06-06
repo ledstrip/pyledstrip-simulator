@@ -20,7 +20,7 @@ from itertools import zip_longest
 from os.path import isfile
 from threading import Thread
 
-from pyledstrip import LedStrip
+import pyledstrip
 
 
 class HttpHandler(BaseHTTPRequestHandler):
@@ -122,7 +122,7 @@ class LedServer:
 
         while not self.stop:
             try:
-                data, client_address = sock.recvfrom(LedStrip.DATA_OFFSET + self.MAX_LED_COUNT * 3)
+                data, client_address = sock.recvfrom(pyledstrip.ProtocolEsp.DATA_OFFSET + self.MAX_LED_COUNT * 3)
             except InterruptedError:
                 continue
 
@@ -135,13 +135,13 @@ class LedServer:
                 continue
 
             self.data_updates += 1
-            pixel_groups = [iter(data[LedStrip.DATA_OFFSET:])] * 3
+            pixel_groups = [iter(data[pyledstrip.ProtocolEsp.DATA_OFFSET:])] * 3
 
             self.pixels = [
                 [
-                    pixel_group[LedStrip.RED_OFFSET],
-                    pixel_group[LedStrip.GREEN_OFFSET],
-                    pixel_group[LedStrip.BLUE_OFFSET]
+                    pixel_group[pyledstrip.ProtocolEsp.RED_OFFSET],
+                    pixel_group[pyledstrip.ProtocolEsp.GREEN_OFFSET],
+                    pixel_group[pyledstrip.ProtocolEsp.BLUE_OFFSET]
                 ] for pixel_group in zip_longest(*pixel_groups)
             ]
 
